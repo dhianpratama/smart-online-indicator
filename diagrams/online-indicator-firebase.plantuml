@@ -1,0 +1,72 @@
+@startuml
+
+title Online Indicator using Firebase
+
+autonumber
+actor APP
+
+== Login and Logout ==
+APP -> FIREBASE: On Login, connect to firebase
+note left
+set data
+{
+  user_id: 1,
+  status: "online",
+  type: "login",
+  last_online_time: "xxx"
+}
+end note
+APP -> FIREBASE: On Logout, set data to firebase
+note left
+{
+  user_id: 1,
+  type: "logout"
+  status: "offline"
+  last_online_time: "xxx"
+}
+end note
+APP -> FIREBASE: When user disable notification, set data to firebase
+note left
+{
+  user_id: 1,
+  type: "mute"
+  status: "mute"
+  last_online_time: "xxx"
+}
+end note
+FIREBASE -> "CLOUD FUNCTION": On every data created or updated, will send to cloud function
+"CLOUD FUNCTION" -> REDIS: Save/update data
+
+== Pingpong Healtchecker ==
+"CLOUD FUNCTION" -> "CLOUD FUNCTION": If user status is online then continue, otherwise just stop.
+"CLOUD FUNCTION" -> "CLOUD FUNCTION": Delay X seconds/minutes
+"CLOUD FUNCTION" -> FIREBASE: Send ping message to client app
+FIREBASE -> APP: Forward ping message to client app
+APP -> FIREBASE: Reply with pong message
+note left
+{
+  user_id: 1,
+  status: "online",
+  type: "pong",
+  last_online_time: "xxx"
+}
+end note
+FIREBASE -> "CLOUD FUNCTION": Same steps starting from no 4
+
+
+== User Offline Checker ==
+CRONJOB -> "USER STATUS SERVICE": Every X minute, POST /offline-checker
+"USER STATUS SERVICE" -> REDIS: Get all users with status online
+"USER STATUS SERVICE" -> "USER STATUS SERVICE": Filter users where last login time > 10 mins ago.
+"USER STATUS SERVICE" -> REDIS: For each user, update user status to offline
+"USER STATUS SERVICE" -> FIREBASE: For each user, update user status to offline
+
+
+== API ==
+APP -> "API GATEWAY": GET /user/<id>/status
+"API GATEWAY" -> "USER STATUS SERVICE": Forward GET /user/<id>/status
+"USER STATUS SERVICE" -> REDIS: Get user by id
+"USER STATUS SERVICE" -> APP: Response user status data
+
+
+@enduml

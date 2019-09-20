@@ -1,0 +1,69 @@
+@startuml
+
+title Online Indicator using Websocket
+
+autonumber
+actor APP
+
+== Login and Logout ==
+APP -> "WEBSOCKET SERVER": On Login, connect to websocket
+note left
+set data
+{
+  user_id: 1,
+  status: "online",
+  type: "login",
+  last_online_time: "xxx"
+}
+end note
+APP -> "WEBSOCKET SERVER": On Logout, send data via websocket
+note left
+{
+  user_id: 1,
+  type: "logout"
+  status: "offline"
+  last_online_time: "xxx"
+}
+end note
+APP -> "WEBSOCKET SERVER": When user disable notification, send data via websocket
+note left
+{
+  user_id: 1,
+  type: "mute"
+  status: "mute"
+  last_online_time: "xxx"
+}
+end note
+"WEBSOCKET SERVER" -> "REDIS": Save/update data to redis
+
+== Pingpong Healtchecker ==
+"WEBSOCKET SERVER" -> "WEBSOCKET SERVER": If status is online then continue, otherwise stop here.
+"WEBSOCKET SERVER" -> "WEBSOCKET SERVER": Delay X seconds/minutes
+"WEBSOCKET SERVER" -> APP: Send ping message
+APP -> "WEBSOCKET SERVER": Reply with pong message
+note left
+{
+  user_id: 1,
+  status: "online",
+  type: "pong",
+  last_online_time: "xxx"
+}
+end note
+"WEBSOCKET SERVER" -> "REDIS": Same steps starting from no 4
+
+
+== User Offline Checker ==
+CRONJOB -> "USER STATUS SERVICE": Every X minute, POST /offline-checker
+"USER STATUS SERVICE" -> REDIS: Get all users with status online
+"USER STATUS SERVICE" -> "USER STATUS SERVICE": Filter users where last login time > 10 mins ago.
+"USER STATUS SERVICE" -> REDIS: For each user, update user status to offline
+
+
+== API ==
+APP -> "API GATEWAY": GET /user/<id>/status
+"API GATEWAY" -> "USER STATUS SERVICE": Forward GET /user/<id>/status
+"USER STATUS SERVICE" -> REDIS: Get user by id
+"USER STATUS SERVICE" -> APP: Response user status data
+
+
+@enduml

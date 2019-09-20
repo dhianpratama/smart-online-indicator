@@ -1,0 +1,136 @@
+@startuml
+
+title Online Indicator using MQTT
+
+autonumber
+actor DHIAN
+participant "MQTT SERVER"
+participant "PRESENCE SERVICE"
+participant REDIS
+participant "USER STATUS SERVICE"
+participant CRONJOB
+actor WENHAN
+
+== Login and OnConnect ==
+DHIAN -> DHIAN: Do Login
+DHIAN -> "MQTT SERVER": Connect to MQTT
+DHIAN -> "MQTT SERVER": On Connect, Publish message to /presence topic
+note left
+{
+  topic: /presence,
+  payload: {
+    user_id: 1,
+    type: "login"
+    status: "online"
+    last_online_time: "xxx"
+  }
+}
+end note
+DHIAN -> DHIAN: Get friends list
+DHIAN -> "MQTT SERVER": For each friend, subscribe to /client/<user-id>/presence
+
+== Logout ==
+DHIAN -> "MQTT SERVER": Publish message
+note left
+{
+  topic: /presence,
+  payload: {
+    user_id: 1,
+    type: "logout"
+    status: "offline"
+    last_online_time: "xxx"
+  }
+}
+end note
+DHIAN -> DHIAN: Do Logout, disconnect from MQTT
+
+== Precense Service ==
+"PRESENCE SERVICE" -> "MQTT SERVER": Subscribe to /precense topic
+"MQTT SERVER" -> "PRESENCE SERVICE": Get data
+note left
+{
+  payload: {
+    user_id: 1,
+    type: "login"
+    status: "online"
+    last_online_time: "xxx"
+  }
+}
+end note
+"PRESENCE SERVICE" -> "REDIS": Get user data by id
+"PRESENCE SERVICE" -> "REDIS": Save new data to redis
+"PRESENCE SERVICE" -> "PRESENCE SERVICE": if previous status !== current status, do below, otherwise stop here
+"PRESENCE SERVICE" -> "MQTT SERVER": Publish message to /client/<user-id>/presence topic
+note left
+{
+  topic: /client/<user-id>/presence,
+  payload: {
+    user_id: 1,
+    type: "login"
+    status: "online"
+    last_online_time: "xxx"
+  }
+}
+end note
+WENHAN -> "MQTT SERVER": Read note
+note right
+Assume Wenhan is Dhian's friend
+and Wenhan already subscribe to Dhian's topic
+/client/1/presence
+end note
+"MQTT SERVER" -> WENHAN: Get data
+note right
+{
+  payload: {
+    user_id: 1,
+    type: "login"
+    status: "online"
+    last_online_time: "xxx"
+  }
+}
+end note
+WENHAN -> WENHAN: Update Dhian's status to online
+
+== Alive Reporter ==
+"DHIAN" -> "DHIAN": Every X minutes, do below
+"DHIAN" -> "MQTT SERVER": Publish message to /presence topic, to tell that client is alive
+note left
+{
+  topic: /presence,
+  payload: {
+    user_id: 1,
+    type: "alive"
+    status: "online"
+    last_online_time: "xxx"
+  }
+}
+end note
+"PRESENCE SERVICE" -> "REDIS": Same step starting from no 9
+
+
+== User Offline Checker ==
+CRONJOB -> "USER STATUS SERVICE": Every X minute, POST /offline-checker
+"USER STATUS SERVICE" -> REDIS: Get all users with status online
+"USER STATUS SERVICE" -> "USER STATUS SERVICE": Filter users where last login time > X mins ago.
+"USER STATUS SERVICE" -> REDIS: For each user, update user status to offline
+"USER STATUS SERVICE" -> "MQTT SERVER": Publish message to /client/<user-id>/presence topic
+note left
+{
+  topic: /client/<user-id>/presence,
+  payload: {
+    user_id: 1,
+    type: "disconnect"
+    status: "offline"
+    last_online_time: "xxx"
+  }
+}
+end note
+
+
+== API ==
+DHIAN -> "USER STATUS SERVICE": GET /user/<id>/status
+"USER STATUS SERVICE" -> REDIS: Get user by id
+"USER STATUS SERVICE" -> DHIAN: Response user status data
+
+
+@enduml

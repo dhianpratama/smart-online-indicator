@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
+  mosca-broker:
+    build:
+      context: mosca-broker/.
+      dockerfile: docker/Dockerfile
+    container_name: mosca-broker
+    restart: always
+    ports:
+      - 80:80
+      - 1833:1833
+
+  presence:
+    build:
+      context: presence/.
+      dockerfile: docker/Dockerfile
+    container_name: presence
+    restart: always
+
+volumes:
+  redis:

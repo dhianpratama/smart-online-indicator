@@ -1,0 +1,82 @@
+{
+  "extends": [
+    "tslint:latest"
+  ],
+  "rules": {
+    "class-name": true,
+    "comment-format": [
+      true,
+      "check-space"
+    ],
+    "indent": [
+      true,
+      "spaces",
+      2
+    ],
+    "interface-name": [
+      true,
+      "always-prefix"
+    ],
+    "jsdoc-format": true,
+    "max-line-length": [
+      true,
+      200
+    ],
+    "no-console": false,
+    "no-consecutive-blank-lines": true,
+    "no-empty": false,
+    "no-internal-module": true,
+    "no-null-keyword": true,
+    "no-object-literal-type-assertion": false,
+    "no-shadowed-variable": false,
+    "no-submodule-imports": false,
+    "no-this-assignment": false,
+    "no-trailing-whitespace": true,
+    "no-var-keyword": true,
+    "object-literal-sort-keys": false,
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-whitespace"
+    ],
+    "only-arrow-functions": false,
+    "prefer-const": true,
+    "quotemark": [
+      true,
+      "double",
+      "avoid-escape",
+      "avoid single"
+    ],
+    "semicolon": [
+      true,
+      "always"
+    ],
+    "space-before-function-paren": true,
+    "typedef-whitespace": [
+      true,
+      {
+        "call-signature": "nospace",
+        "index-signature": "nospace",
+        "parameter": "nospace",
+        "property-declaration": "nospace",
+        "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "onespace",
+        "index-signature": "onespace",
+        "parameter": "onespace",
+        "property-declaration": "onespace",
+        "variable-declaration": "onespace"
+      }
+    ],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-type"
+    ]
+  }
+}
