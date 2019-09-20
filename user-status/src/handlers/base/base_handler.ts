@@ -1,11 +1,9 @@
 import * as httpStatus from "http-status";
 import { Observable } from "rxjs";
-import { connectRedis } from "../../infrastructure/redis/connect_redis";
 import { IRequestData, IValidationItem } from "../../interfaces/common";
-import { createHttpError } from "../../utils/create_http_error";
-import { authorizedToken, getAllParams, getSessionUser } from "../../utils/request";
-import { sendErrorResponse } from "../../utils/send_error_response";
-import { sendJsendResponse } from "../../utils/send_jsend_response";
+import { connectRedis } from "../../utils/connect_redis";
+import { authorizedToken, getAllParams } from "../../utils/request";
+import { createHttpError, sendErrorResponse, sendJsendResponse } from "../../utils/response";
 
 export enum Database {
     MONGO,
@@ -22,10 +20,7 @@ export class BaseHandler<T> {
     private useAuthorization: boolean = false;
     private databases: Database[] = [];
 
-    constructor (
-        private requestObservable: any,
-    ) {
-    }
+    constructor (private request$: Observable<any>) {}
 
     public withValidation (validation: IValidationItem[]) {
         this.validation = validation;
@@ -65,10 +60,10 @@ export class BaseHandler<T> {
     }
 
     public process () {
-        return this.requestObservable
+        return this.request$
             .switchMap(() => {
                 return this.useAuthorization
-                    ? authorizedToken(this.requestObservable)
+                    ? authorizedToken(this.request$)
                     : Observable.of(undefined);
             })
             .switchMap(() => {
@@ -82,13 +77,14 @@ export class BaseHandler<T> {
 
                     return obs;
                 });
+
                 if (observables.length === 0) {
-                    return Observable.of(true);
+                    return Observable.of([]);
                 }
 
                 return Observable.zip(...observables);
             })
-            .switchMapTo(getAllParams(this.requestObservable))
+            .switchMap(() => getAllParams(this.request$))
             .switchMap((data: IRequestData<T>) => {
                 const { params } = data;
 
@@ -98,10 +94,10 @@ export class BaseHandler<T> {
                         .switchMap(() => Observable.of(data));
             })
             .switchMap((data: IRequestData<T>) => this.epicFunction(data))
-            .switchMap((data: any) => sendJsendResponse(this.requestObservable,
+            .switchMap((data: any) => sendJsendResponse(this.request$,
                 this.includeResponseData ? data : undefined,
                 this.includeResponseMessage ? this.messageResponse : undefined))
-            .catch((err) => sendErrorResponse(this.requestObservable, err));
+            .catch((err) => sendErrorResponse(this.request$, err));
     }
 
     private checkValidation (params: T, validation: IValidationItem[]) {

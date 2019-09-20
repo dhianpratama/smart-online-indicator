@@ -1,5 +1,4 @@
-import { sendErrorResponse } from "../../utils/send_error_response";
-import { sendJsendResponse } from "../../utils/send_jsend_response";
+import { sendErrorResponse, sendJsendResponse } from "../../utils/response";
 
 const livenessHandler = (requestObservable) => {
     return requestObservable

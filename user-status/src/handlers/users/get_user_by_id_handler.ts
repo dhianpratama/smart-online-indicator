@@ -1,7 +1,7 @@
 import { RedisClient } from "redis";
 import { Observable } from "rxjs";
-import { connectRedis } from "../../infrastructure/redis/connect_redis";
 import { IRequestData, IValidationItem } from "../../interfaces/common";
+import { connectRedis } from "../../utils/connect_redis";
 import { BaseHandler, Database } from "../base/base_handler";
 
 interface IParams {

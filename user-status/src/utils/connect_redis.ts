@@ -1,7 +1,7 @@
 import { RedisClient } from "redis";
 import { Observable } from "rxjs";
 import * as rxRedis from "rxredis";
-import { config } from "../../config";
+import { config } from "../config";
 
 let redisClient;
 let rxRedisClient;
