@@ -1,15 +1,11 @@
 export interface IConfig {
-    port: number;
-    debugLogging: boolean;
-    mqttUrl: string;
-    redisUrl: string;
+    interval: number;
+    userStatusBaseUrl: string;
 }
 
 const config: IConfig = {
-    port: +process.env.PORT || 8088,
-    debugLogging: process.env.NODE_ENV === "development",
-    mqttUrl: process.env.MQTT_URL || "mqtt://localhost:1833",
-    redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
+    interval: +process.env.INTERVAL || 5 * 60 * 1000,
+    userStatusBaseUrl: process.env.USER_STATUS_BASE_URL || "http://localhost:8080",
 };
 
 export { config };
