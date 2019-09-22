@@ -81,18 +81,14 @@ export class MqttJsClient implements IMqttClient {
 
     public publish = (topic: string, message: string): Observable<any> => {
         return this.connectIfNeeded()
-            .do(() => console.log("d"))
             .do(() => this.nativeMqttClient.publish(topic, message))
-            .do(() => console.log("e"))
             .switchMap(() => Observable.of({}));
     }
 
     private connectIfNeeded = (): Observable<MqttClientStatus> => {
         return this.getStatuses()
-            .take(1)
-            .do((status) => console.log("take 1", status))                                                      // Get latest connection status.
-            .filter((status) => status === MqttClientStatus.Idle)
-            .do(() => console.log("yes"))          // Checks whether right now we have Idle realtime connection.
+            .take(1)                                                        // Get latest connection status.
+            .filter((status) => status === MqttClientStatus.Idle)           // Checks whether right now we have Idle realtime connection.
             .switchMap(() => this.connect())
             .defaultIfEmpty((function () {}()))                             // Triggers below stream is still being executed (in case the connection are not Idle).
             .switchMap((_) => this.getStatuses())

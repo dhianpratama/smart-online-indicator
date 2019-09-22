@@ -1,7 +1,7 @@
-Denjaka
+User-Status
 ============
 
-Denjaka is a service for Playgame gamification.
+API Service to server user-status
 
 Running the service
 =================

@@ -3,18 +3,8 @@ import * as redis from "redis";
 import { config } from "./config";
 import { logger } from "./utils/logger";
 
-const ascoltatore = {
-  type: "redis",
-  redis,
-  db: 12,
-  port: config.redisPort,
-  return_buffers: true,
-  host: config.redisHost,
-};
-
 const settings = {
   port: config.mqttPort,
-  // backend: ascoltatore,
 };
 
 const server = new mosca.Server(settings);

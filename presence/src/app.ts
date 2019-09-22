@@ -15,11 +15,11 @@ presenceService.handlePresenceMessage()
         (error) => logger.warn(`Error processing presence message => \n ${JSON.stringify(error.stack)}`),
     );
 
-Observable.of({})
-    .delay(5000)
-    .do(() => logger.info("will publish dummy"))
-    .switchMap(() => mqttRxClient.publish("presence", JSON.stringify({ user_id: 2, status: "offline", last_online_type: "login", last_online_time: "2019-09-08 06:27:07.966Z" })))
-    .subscribe(
-        () => logger.info("done publish"),
-        (error) => logger.info("Error publis"),
-     );
+// Observable.of({})
+//     .delay(5000)
+//     .do(() => logger.info("will publish dummy"))
+//     .switchMap(() => mqttRxClient.publish("presence", JSON.stringify({ user_id: 2, status: "offline", last_online_type: "login", last_online_time: "2019-09-08 06:27:07.966Z" })))
+//     .subscribe(
+//         () => logger.info("done publish"),
+//         (error) => logger.info("Error publis"),
+//      );

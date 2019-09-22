@@ -39,13 +39,11 @@ const filterAbnormalUser = (user: IUser) => {
 };
 
 const processAbnormalUser = (user: IUser, mqttClient: IMqttClient, redisClient: any) => {
-    console.log("process")
-    return redisClient.hset("user-status", user.user_id, JSON.stringify(user))
+    return redisClient.hset("user-status", user.user_id, JSON.stringify({ ...user, status: "offline" }))
         .switchMap(() => notifyUserPresence(user, mqttClient));
 };
 
 const notifyUserPresence = (user: IUser, mqttClient: IMqttClient) => {
-    console.log("notify")
     return mqttClient.publish(`client/${user.user_id}/presence`, JSON.stringify(user));
 };
 
