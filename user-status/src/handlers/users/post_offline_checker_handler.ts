@@ -21,8 +21,9 @@ const postOfflineCheckerHandler = (requestObservable: Observable<any>) => {
                     .map((it) => JSON.parse(it))
                     .filter((it) => filterAbnormalUser(it)))
                 .do((users: IUser[]) => logger.info(`Got ${users.length} abnormal users`))
-                .switchMap((users: IUser[]) => Observable
-                    .zip(...users.map((it) => processAbnormalUser(it, mqttClient, redisClient))))
+                .switchMap((users: IUser[]) => users.length > 0
+                    ? Observable.zip(...users.map((it) => processAbnormalUser(it, mqttClient, redisClient)))
+                    : Observable.of([]))
                 .do(() => mqttClient.disconnect());
         })
         .withResponseMessage("Successfully checked")

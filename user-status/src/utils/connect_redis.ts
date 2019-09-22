@@ -9,7 +9,7 @@ let rxRedisClient;
 export const connectRedis = () => {
     return Observable.defer(() => {
         if (!redisClient) {
-            redisClient = new RedisClient({ url: config.redisUrl });
+            redisClient = new RedisClient({ host: config.redisHost, port: config.redisPort });
             rxRedisClient = rxRedis(redisClient);
         }
 
