@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="app.js"></script>
+</head>
+
+<body>
+
+    <div class="container" style="padding-top: 50px;" ng-app="myApp" ng-controller="clientSampleController">
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>My Info</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="userSelect">Select user</label>
+                        <select style="width: 300px;" class="form-control" ng-model="data.selectedUser" ng-disabled="data.selectedStatus.id !== 'logout'">
+                            <option ng-repeat="user in data.availableUsers" ng-value="user">{{user}}</option>
+                        </select>
+                    </div>
+                    <p>
+                        <strong>Status:</strong> {{ data.selectedStatus.name }}
+                        <br />
+                        <strong>Notes:</strong> {{ data.selectedStatus.description }}
+                    </p>
+                    <button type="button" class="btn btn-primary" ng-click="actions.onLogin()" ng-show="data.selectedStatus.id === 'logout'">LOGIN</button>
+                    <button type="button" class="btn btn-danger" ng-click="actions.onLogout()" ng-show="data.selectedStatus.id === 'online'">LOGOUT</button>
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <h2>Friend List</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mark</td>
+                            <td>@mdo</td>
+                        </tr>
+                        <tr>
+                            <td>Jacob</td>
+                            <td>@fat</td>
+                        </tr>
+                        <tr>
+                            <td>Larry</td>
+                            <td>@twitter</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -4,6 +4,7 @@ const app = angular.module("myApp", []);
 app.controller("clientSampleController", ($scope) => {
   $scope.data = {
     selectedUser: null,
+    selectedStatus: null,
     availableUsers: [
         "Dhian",
         "John",
@@ -31,6 +32,21 @@ app.controller("clientSampleController", ($scope) => {
   };
 
   $scope.actions = {
-
+    init: () => {
+        $scope.actions.setDefaultOptions();
+    },
+    setDefaultOptions: () => {
+        $scope.data.selectedUser = $scope.data.availableUsers[0];
+        $scope.data.selectedStatus = $scope.data.availableStatusOptions[1];
+    },
+    onLogin: () => {
+        $scope.data.selectedStatus = $scope.data.availableStatusOptions[0];
+    },
+    onLogout: () => {
+        $scope.data.selectedStatus = $scope.data.availableStatusOptions[1];
+    }
   };
+
+  $scope.actions.init();
+
 });

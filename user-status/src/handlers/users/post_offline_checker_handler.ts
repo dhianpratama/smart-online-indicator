@@ -16,13 +16,15 @@ const postOfflineCheckerHandler = (requestObservable: Observable<any>) => {
 
             return connectRedis()
                 .do((client) => redisClient = client)
-                .switchMap(() => redisClient.hgetall("user-status"))
+                .switchMap(() => redisClient.hgetall("user-status"))                        // get all data from user-status
+                .map((data) => data || {})                                                  // to handle if result is null/undefined, so it won't crash at next process
                 .map((data) => Object.values(data)
                     .map((it) => JSON.parse(it))
                     .filter((it) => filterAbnormalUser(it)))
                 .do((users: IUser[]) => logger.info(`Got ${users.length} abnormal users`))
                 .switchMap((users: IUser[]) => users.length > 0
-                    ? Observable.zip(...users.map((it) => processAbnormalUser(it, mqttClient, redisClient)))
+                    ? Observable.zip(...users.map((it) =>
+                        processAbnormalUser(it, mqttClient, redisClient)))
                     : Observable.of([]))
                 .do(() => mqttClient.disconnect());
         })

@@ -9,7 +9,7 @@ export interface IConfig {
 }
 
 const config: IConfig = {
-    port: +process.env.PORT || 8087,
+    port: +process.env.PORT || 8080,
     debugLogging: process.env.NODE_ENV === "development",
     mqttUrl: process.env.MQTT_URL || "mqtt://localhost:1833",
     redisUrl: process.env.REDIS_URL || "redis://localhost:6379",

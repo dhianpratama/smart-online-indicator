@@ -30,6 +30,8 @@ services:
       - "NODE_ENV=production"
       - "MQTT_URL=mqtt://mosca-broker:1833"
       - "REDIS_URL=redis://redis:6379"
+      - "REDIS_HOST=redis"
+      - "REDIS_PORT=6379"
     restart: always
 
   user-status:
@@ -37,10 +39,15 @@ services:
       context: user-status/.
       dockerfile: docker/Dockerfile
     container_name: user-status
+    ports:
+      - 8080:8080
     environment:
       - "NODE_ENV=production"
+      - "PORT=8080"
       - "MQTT_URL=mqtt://mosca-broker:1833"
       - "REDIS_URL=redis://redis:6379"
+      - "REDIS_HOST=redis"
+      - "REDIS_PORT=6379"
       - "OFFLINE_THRESHOLD_IN_MINUTES=5"
     restart: always
   
@@ -51,8 +58,17 @@ services:
     container_name: offline-checker-cron
     environment:
       - "NODE_ENV=production"
-      - "INTERVAL=2"
+      - "INTERVAL=60000"
       - "USER_STATUS_BASE_URL=http://user-status:8080"
+    restart: always
+  
+  client-sample:
+    build:
+      context: client-sample/.
+      dockerfile: docker/Dockerfile
+    container_name: client-sample
+    ports:
+      - 80:80
     restart: always
 
 volumes:

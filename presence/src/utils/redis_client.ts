@@ -6,15 +6,14 @@ let redisClient;
 let rxRedisClient;
 
 export class RedisRxClient {
-    private url: string;
-    constructor (redisUrl: string) {
-        this.url = redisUrl;
+
+    constructor (private readonly host: string, private readonly port: number) {
     }
 
     public connectIfNeeded = () => {
         return Observable.defer(() => {
             if (!redisClient) {
-                redisClient = new RedisClient({ url: this.url });
+                redisClient = new RedisClient({ host: this.host, port: this.port });
                 rxRedisClient = rxRedis(redisClient);
             }
 

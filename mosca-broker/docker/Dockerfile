@@ -20,5 +20,5 @@ COPY . ./
 RUN npm run build
 
 # Default runtime configs and helpers
-EXPOSE 8080
+EXPOSE 1833
 CMD sync; /app/docker/start.sh

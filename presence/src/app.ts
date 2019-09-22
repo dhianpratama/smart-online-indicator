@@ -6,7 +6,7 @@ import { MqttJsClient } from "./utils/mqtt_client";
 import { RedisRxClient } from "./utils/redis_client";
 
 const mqttRxClient = new MqttJsClient(config.mqttUrl);
-const redisRxClient = new RedisRxClient(config.redisUrl);
+const redisRxClient = new RedisRxClient(config.redisHost, config.redisPort);
 const presenceService = new PresenceService(mqttRxClient, redisRxClient);
 
 presenceService.handlePresenceMessage()
