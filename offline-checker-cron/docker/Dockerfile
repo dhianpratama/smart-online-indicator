@@ -1,5 +1,7 @@
 FROM node:10.15.3-alpine
 
+RUN npm config set unsafe-perm true
+
 # Global dependencies
 RUN apk --no-cache add --virtual native-deps \
     g++ gcc libgcc libstdc++ linux-headers git make python && \
