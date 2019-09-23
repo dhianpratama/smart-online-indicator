@@ -1,5 +1,6 @@
 import * as mqtt from "mqtt";
 import { BehaviorSubject, Observable, Subscriber } from "rxjs";
+import { logger } from "./logger";
 
 export enum MqttClientStatus {
     Idle,
@@ -35,9 +36,14 @@ export class MqttJsClient implements IMqttClient {
     public connect = (): Observable<void> => {
         this.statuses.next(MqttClientStatus.Connecting);
 
-        this.nativeMqttClient = mqtt.connect(this.host, { username: this.username, password: this.password });
+        this.nativeMqttClient = mqtt.connect(this.host, {
+            username: this.username,
+            password: this.password,
+            clientId: "mqtt_backend_presence",
+        });
 
         this.nativeMqttClient.on("connect", ((): void => {
+            logger.info("on connect");
             this.statuses.next(MqttClientStatus.Connected);
         }));
 

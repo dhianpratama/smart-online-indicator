@@ -5,6 +5,11 @@ import { logger } from "./utils/logger";
 
 const settings = {
   port: config.mqttPort,
+  http: {
+    port: 1884,
+    bundle: true,
+    static: "./",
+  },
 };
 
 const server = new mosca.Server(settings);

@@ -20,6 +20,7 @@ services:
     restart: always
     ports:
       - 1833:1833
+      - 1884:1884
 
   presence:
     build:
@@ -48,7 +49,7 @@ services:
       - "REDIS_URL=redis://redis:6379"
       - "REDIS_HOST=redis"
       - "REDIS_PORT=6379"
-      - "OFFLINE_THRESHOLD_IN_MINUTES=5"
+      - "OFFLINE_THRESHOLD_IN_MINUTES=2"
     restart: always
   
   offline-checker-cron:
@@ -70,6 +71,8 @@ services:
     ports:
       - 80:80
     restart: always
+    volumes:
+      - ./client-sample/src:/usr/share/nginx/html
 
 volumes:
   redis:

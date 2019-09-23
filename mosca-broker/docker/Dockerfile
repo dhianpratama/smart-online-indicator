@@ -1,9 +1,9 @@
 FROM node:10.15.3-alpine
 
 # Global dependencies
-RUN apk --no-cache add --virtual native-deps \
-    g++ gcc libgcc libstdc++ linux-headers git make python && \
-    npm install --quiet node-gyp -g
+# RUN apk --no-cache add --virtual native-deps \
+#     g++ gcc libgcc libstdc++ linux-headers git make python && \
+#     npm install --quiet node-gyp -g
 
 # App dependencies
 WORKDIR /app

@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -24,7 +23,7 @@
     <div class="container" style="padding-top: 50px;" ng-app="myApp" ng-controller="clientSampleController">
         <div class="row">
             <div class="col-lg-6">
-                <h2>My Info</h2>
+                <h2>My Infos</h2>
                 <form>
                     <div class="form-group">
                         <label for="userSelect">Select user</label>
@@ -51,17 +50,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Mark</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <td>Jacob</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <td>Larry</td>
-                            <td>@twitter</td>
+                        <tr ng-repeat="u in data.usersData">
+                            <td>{{ u.user_id }}</td>
+                            <td>
+                                <div class="row">
+                                    <div style="width: 15px; height: 15px; border-radius: 50%; background-color: green; margin-top: 6px;" ng-show="u.status === 'online'"></div>
+                                    <div style="width: 15px; height: 15px; border-radius: 50%; background-color: red; margin-top: 6px;" ng-show="u.status !== 'online'"></div>
+                                    <div style="margin-left: 5px;">{{ u.status }}</div>
+                                </div>
+                                <div>
+                                    <span style="font-size: 13px;">Last online: {{ u.last_online_time }}</span>
+                                </div>
+                                
+                            </td>
                         </tr>
                     </tbody>
                 </table>
