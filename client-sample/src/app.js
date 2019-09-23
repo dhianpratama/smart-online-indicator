@@ -150,6 +150,7 @@ app.controller("clientSampleController", ($scope, $interval) => {
     };
 
     $scope.$on('$destroy', function() {
+        $scope.actions.onLogout();
         $scope.actions.destroyInterval();
     });
 
