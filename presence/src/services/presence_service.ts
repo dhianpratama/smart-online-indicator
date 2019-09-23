@@ -36,7 +36,7 @@ export class PresenceService {
 
     private getUserFromDb = (userId: string): Observable<any> => {
         return this.redisRxClient.hget("user-status", userId)
-            .map((result: string) => ({ user_status: JSON.parse(result) }));
+            .map((result: string) => JSON.parse(result));
     }
 
 }
