@@ -42,12 +42,15 @@ const filterAbnormalUser = (user: IUser) => {
 };
 
 const processAbnormalUser = (user: IUser, mqttClient: IMqttClient, redisClient: any) => {
+    logger.info(`will process abnormal user => ${JSON.stringify(user)}`);
     return redisClient.hset("user-status", user.user_id, JSON.stringify({ ...user, status: "offline" }))
+        .do(() => logger.info(`will notify for user => ${JSON.stringify(user)}`))
         .switchMap(() => notifyUserPresence(user, mqttClient));
 };
 
 const notifyUserPresence = (user: IUser, mqttClient: IMqttClient) => {
-    return mqttClient.publish(`client/${user.user_id}/presence`, JSON.stringify(user));
+    return mqttClient.publish(`client/${user.user_id}/presence`, JSON.stringify(user))
+        .do(() => logger.info(`notify done for user => ${JSON.stringify(user)}`));
 };
 
 export { postOfflineCheckerHandler };
