@@ -42,10 +42,11 @@ const filterAbnormalUser = (user: IUser) => {
 };
 
 const processAbnormalUser = (user: IUser, mqttClient: IMqttClient, redisClient: any) => {
-    logger.info(`will process abnormal user => ${JSON.stringify(user)}`);
-    return redisClient.hset("user-status", user.user_id, JSON.stringify({ ...user, status: "offline" }))
-        .do(() => logger.info(`will notify for user => ${JSON.stringify(user)}`))
-        .switchMap(() => notifyUserPresence(user, mqttClient));
+    const updatedUser = { ...user, status: "offline"  };
+    logger.info(`will process abnormal user => ${JSON.stringify(updatedUser)}`);
+    return redisClient.hset("user-status", user.user_id, JSON.stringify(updatedUser))
+        .do(() => logger.info(`will notify for user => ${JSON.stringify(updatedUser)}`))
+        .switchMap(() => notifyUserPresence(updatedUser, mqttClient));
 };
 
 const notifyUserPresence = (user: IUser, mqttClient: IMqttClient) => {
