@@ -41,7 +41,7 @@
                     <button type="button" class="btn btn-danger" ng-click="actions.onLogout()" ng-show="data.selectedStatus.id === 'online'">LOGOUT</button>
                 </form>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6" ng-show="data.selectedStatus.id === 'online'">
                 <h2>Friend List</h2>
                 <table class="table">
                     <thead>

@@ -17,6 +17,7 @@ services:
     environment:
       - "NODE_ENV=production"
       - "MQTT_PORT=1833"
+      - "WS_PORT=1884"
     restart: always
     ports:
       - 1833:1833
