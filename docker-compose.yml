@@ -71,8 +71,6 @@ services:
     ports:
       - 80:80
     restart: always
-    volumes:
-      - ./client-sample/src:/usr/share/nginx/html
 
 volumes:
   redis:

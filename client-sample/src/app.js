@@ -62,7 +62,7 @@ app.controller("clientSampleController", ($scope, $interval) => {
             $scope.actions.destroyInterval();
         },
         mqtt: (callback) => {
-            MQTT_CLIENT = mqtt.connect("mqtt://localhost:1884", {
+            MQTT_CLIENT = mqtt.connect("mqtt://104.248.155.37:1884", {
                 clientId: `mqtt_app_user_${$scope.data.selectedUser}`
             })
             MQTT_CLIENT.on("connect", () => {
@@ -141,7 +141,7 @@ app.controller("clientSampleController", ($scope, $interval) => {
             $scope.$apply();
         },
         getFriendStatuses: () => {
-            $.get("http://localhost:8080/users/status", (response) => {
+            $.get("http://104.248.155.37:8080/users/status", (response) => {
                 $scope.data.usersData = response.data.users_statuses
                     .filter((u) => u.user_id !== $scope.data.selectedUser);
                 $scope.$apply();
