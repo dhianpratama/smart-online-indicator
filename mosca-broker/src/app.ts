@@ -6,7 +6,7 @@ import { logger } from "./utils/logger";
 const settings = {
   port: config.mqttPort,
   http: {
-    port: 1884,
+    port: config.wsPort,
     bundle: true,
     static: "./",
   },
