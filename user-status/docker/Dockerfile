@@ -4,10 +4,12 @@ FROM node:10.15.3-alpine
 RUN apk --no-cache add --virtual native-deps \
     g++ gcc libgcc libstdc++ linux-headers git make python && \
     npm install --quiet node-gyp -g
+    
 
 # App dependencies
 WORKDIR /app
 COPY package.json ./
+RUN npm config set unsafe-perm true
 RUN npm --allow-root install
 
 # Remove unneeded dependencies

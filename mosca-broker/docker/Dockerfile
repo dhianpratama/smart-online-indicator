@@ -8,6 +8,7 @@ RUN apk --no-cache add --virtual native-deps \
 # App dependencies
 WORKDIR /app
 COPY package.json ./
+RUN npm config set unsafe-perm true
 RUN npm --allow-root install
 
 # Remove unneeded dependencies
