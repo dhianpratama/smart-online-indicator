@@ -15,7 +15,7 @@ const config: IConfig = {
     redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
     redisHost: process.env.REDIS_HOST || "localhost",
     redisPort: +process.env.REDIS_PORT || 6379,
-    offlineThresholdInMinutes: +process.env.OFFLINE_THRESHOLD_IN_MINUTES || 30,
+    offlineThresholdInMinutes: +process.env.OFFLINE_THRESHOLD_IN_MINUTES || 5,
 };
 
 export { config };

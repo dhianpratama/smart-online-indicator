@@ -8,25 +8,34 @@ Running the service
 
 ## How to run server
 
-`npm run serve`
+Development Mode
+```
+npm install
+npm run start
+```
+
+Production mode
+```
+npm install
+npm run serve
+```
 
 
 ## Environment variables
 
-Server related:
-
-* `PORT` (int): The port number the guardian will listen to. Default: `8080`.
-
-Database related:
-
-* `MONGO_URL` (string): MongoDB connection string.
+* `NODE_ENV` (string): Environment mode. Default: `development`
+* `PORT` (int): The port number the service will listen to. Default: `8080`
+* `MQTT_URL` (string): MQTT connection string. Default: `mqtt://localhost:1833`
+* `REDIS_HOST` (string): Redis host. Default: `localhost`
+* `REDIS_PORT` (int): Redis port. Default: `6379`
+* `OFFLINE_THRESHOLD_IN_MINUTES` (string): How long an idle user will be considered as offline. Value in minutes. Default: `5`
 
 
 ## Endpoints
 
-### 1. `GET /ping`
+### 1. `GET /users/status`
 
-Ensures that the server is alive, though not necessarily ready to accept HTTP traffic.
+Get all users with statuses
 
 Sample response(s):
 
@@ -35,214 +44,49 @@ HTTP 200 OK
 
 {
     "status": "success",
-    "message": "pong"
+    "data": {
+        "users_statuses": [
+            {
+                "user_id": "Sabrina",
+                "status": "offline",
+                "last_status_type": "login",
+                "last_online_time": "2019-08-11T06:03:01.073Z"
+            },
+            {
+                "user_id": "Wenhan",
+                "status": "online",
+                "last_status_type": "login",
+                "last_online_time": "2019-08-11T06:03:01.073Z"
+            }
+        ]
+    }
 }
 ```
 
-### 1. `GET /categories`
-
-```
-Request (query string)
-{
-	"limit": 10,
-	"offset": 0
-}
-```
-
-```
-Response 200
-{
-    "status": "success",
-    "data": [
-        {
-            "name": "Adventure",
-            "slug": "adventure",
-            "id": "5c189c013e989add8d73f522"
-        }
-    ]
-}
-```
-
-### 2. `GET /categories/<category_id>/games/count`
-
-```
-Request (query string)
-{
-	"limit": 10,
-	"offset": 0
-}
-```
+### 2. `GET /users/<user_id>/status`
 
 ```
 Response 200
 {
     "status": "success",
     "data": {
-        "total_games": 0
+        "user_status": {
+            "user_id": "Dhian",
+            "status": "offline",
+            "last_online_type": "online",
+            "last_online_time": "2019-09-23T05:47:13.275Z"
+        }
     }
 }
 ```
 
 
-### 3. `GET /games/category/<category_id>`
+### 3. `POST /users/status/offline-checker`
 
-```
-Request (query string)
-{
-	"limit": 10,
-	"offset": 0
-}
-```
 
 ```
 Response 200
 {
-    "status": "success",
-    "data": [
-        {
-            "picture": {
-                "large": "https://static-assets.playgame.tech/img-default-avatar.png",
-                "thumbnail": "https://static-assets.playgame.tech/img-default-avatar.png"
-            },
-            "slugs": [
-                "test",
-                "tist"
-            ],
-            "total_plays": 0,
-            "categories": [
-                "5c189c013e989add8d73f522"
-            ],
-            "name": "Test game",
-            "caption": "the testing game",
-            "description": "this is just for testing purpose only",
-            "developer": {
-                "display_name": "My dev",
-                "website": "https://go.blog",
-                "slug": "blog",
-                "id": "5c19d6833e989add8d73fed7"
-            },
-            "id": "5c19cfb53e989add8d73fcdd"
-        }
-    ]
-}
-```
-
-### 4. `GET /games/search`
-
-```
-Request (query string)
-{
-	"limit": 10,
-	"offset": 0,
-  "category_id": "xxx",
-  "search": "test"
-}
-```
-
-```
-Response 200
-{
-    "status": "success",
-    "data": [
-        {
-            "picture": {
-                "large": "https://static-assets.playgame.tech/img-default-avatar.png",
-                "thumbnail": "https://static-assets.playgame.tech/img-default-avatar.png"
-            },
-            "slugs": [
-                "test",
-                "tist"
-            ],
-            "total_plays": 0,
-            "categories": [
-                "5c189c013e989add8d73f522"
-            ],
-            "name": "Test game",
-            "caption": "the testing game",
-            "description": "this is just for testing purpose only",
-            "developer": {
-                "display_name": "My dev",
-                "website": "https://go.blog",
-                "slug": "blog",
-                "id": "5c19d6833e989add8d73fed7"
-            },
-            "id": "5c19cfb53e989add8d73fcdd"
-        }
-    ]
-}
-```
-
-### 5. `GET /games/<game_id>`
-
-```
-Response 200
-{
-    "status": "success",
-    "data": {
-        "picture": {
-            "large": "https://static-assets.playgame.tech/img-default-avatar.png",
-            "thumbnail": "https://static-assets.playgame.tech/img-default-avatar.png"
-        },
-        "slugs": [
-            "test",
-            "tist"
-        ],
-        "total_plays": 0,
-        "categories": [
-            "5c189c013e989add8d73f522"
-        ],
-        "name": "Test game",
-        "caption": "the testing game",
-        "description": "this is just for testing purpose only",
-        "developer": {
-            "display_name": "My dev",
-            "website": "https://go.blog",
-            "slug": "blog",
-            "id": "5c19d6833e989add8d73fed7"
-        },
-        "id": "5c19cfb53e989add8d73fcdd"
-    }      
-}
-```
-
-### 5. `GET /games/slug/<game_slug>`
-
-```
-Response 200
-{
-    "status": "success",
-    "data": {
-        "picture": {
-            "large": "https://static-assets.playgame.tech/img-default-avatar.png",
-            "thumbnail": "https://static-assets.playgame.tech/img-default-avatar.png"
-        },
-        "slugs": [
-            "test",
-            "tist"
-        ],
-        "total_plays": 0,
-        "categories": [
-            "5c189c013e989add8d73f522"
-        ],
-        "name": "Test game",
-        "caption": "the testing game",
-        "description": "this is just for testing purpose only",
-        "developer": {
-            "display_name": "My dev",
-            "website": "https://go.blog",
-            "slug": "blog",
-            "id": "5c19d6833e989add8d73fed7"
-        },
-        "id": "5c19cfb53e989add8d73fcdd"
-    }      
-}
-```
-
-### 5. `POST /games/<game_id>/play`
-
-```
-Response 200
-{
-    "status": "success"    
+    "status": "success"
 }
 ```
