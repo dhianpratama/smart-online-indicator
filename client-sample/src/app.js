@@ -115,7 +115,7 @@ app.controller("clientSampleController", ($scope, $interval) => {
             KEEP_ALIVE_INTERVAL = $interval(() => {
                 console.log("will report alive")
                 $scope.actions.publishMyPresenceOnline();
-            }, 2 * 60 * 1000);
+            }, 1 * 60 * 1000);
         },
         destroyInterval: () => {
             if (KEEP_ALIVE_INTERVAL) {
