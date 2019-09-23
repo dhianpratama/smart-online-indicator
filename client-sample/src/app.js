@@ -119,7 +119,7 @@ app.controller("clientSampleController", ($scope, $interval) => {
         },
         destroyInterval: () => {
             if (KEEP_ALIVE_INTERVAL) {
-                $interval.stop(KEEP_ALIVE_INTERVAL);
+                $interval.cancel(KEEP_ALIVE_INTERVAL);
                 KEEP_ALIVE_INTERVAL = undefined;
             }
         },
