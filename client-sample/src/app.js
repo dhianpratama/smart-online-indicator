@@ -24,7 +24,7 @@ app.controller("clientSampleController", ($scope, $interval) => {
             {
                 "id": "logout",
                 "name": "Offline (Logged out)",
-                "description": "Logged out from app. Will not send alive report"
+                "description": "Logged out from app. Disconnected from MQTT"
             },
             {
                 "id": "offline",
