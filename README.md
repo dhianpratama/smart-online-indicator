@@ -14,8 +14,7 @@ docker-compose up -d
 
 ## Design Flow
 
-![Image of Design Flow]
-(https://github.com/dhianpratama/smart-online-indicator/blob/master/diagrams/Online%20Indicator%20using%20MQTT.png?raw=true)
+![Image of Design Flow](https://github.com/dhianpratama/smart-online-indicator/blob/master/diagrams/Online%20Indicator%20using%20MQTT.png?raw=true)
 
 ## Environment Variables
 All environment variables that is currently set can be seen in `docker-compose.yml`
