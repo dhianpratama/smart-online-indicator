@@ -3,7 +3,7 @@ Smart Online Indicator
 
 A microservice based for user online indicator. Features included
 - Real time status update
-- Last online status
+- Last online statuss
 
 
 ## How to run server
