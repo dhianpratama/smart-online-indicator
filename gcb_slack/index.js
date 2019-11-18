@@ -38,6 +38,9 @@ const createSlackMessage = (build) => {
         fields: [{
           title: 'Status',
           value: build.status
+        }, {
+          title: 'Raw Data',
+          value: JSON.stringify(build)
         }]
       }
     ]
