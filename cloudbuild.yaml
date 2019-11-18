@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'gcr.io/skipy-259407/quickstart', '.' ]
+images:
+- 'gcr.io/skipy-259407/quickstart'
