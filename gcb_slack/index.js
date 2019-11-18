@@ -39,8 +39,11 @@ const createSlackMessage = (build) => {
           title: 'Status',
           value: build.status
         }, {
-          title: 'Raw Data',
-          value: JSON.stringify(build.results)
+          title: 'Image',
+          value: build.results.images[0].name
+        }, {
+          title: 'Digest',
+          value: build.results.images[0].digest
         }]
       }
     ]
