@@ -40,7 +40,7 @@ const createSlackMessage = (build) => {
           value: build.status
         }, {
           title: 'Raw Data',
-          value: JSON.stringify(build)
+          value: JSON.stringify(build.results)
         }]
       }
     ]
