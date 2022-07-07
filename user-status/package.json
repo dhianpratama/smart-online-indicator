@@ -48,7 +48,7 @@
     "koa-newrelic": "^2.0.3",
     "koa-router": "^7.4.0",
     "koa-router-rx": "^0.4.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mqtt": "^3.0.0",
     "node-graceful": "^0.3.1",
     "redis": "^2.8.0",
